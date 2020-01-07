@@ -64,12 +64,12 @@ The network architectures experimented with were inspired from Residual U-Net de
 
 ### Results ###
 Due to hardware limitations, the video frames had to be resized to 56x32 and sliced into segments of 10 frames each. Both network were trained on such segments. 
-While Residual U-Net's training error reduced over epochs, it also overfit the training data. The results for a randomly sampled sequence of 10 frames from (i)'tractor-sand', used for training, and (ii)'breakdance' and (iii)'bmx-bumps', used only for validation is shown below.
+While Residual U-Net's training error reduced over epochs, it also overfit the training data. The generated maps for a randomly sampled sequence of 10 frames from (i)'tractor-sand', used for training, and (ii)'breakdance' and (iii)'bmx-bumps', used only for validation are shown below.
 <p align="center">
     <img src="./images/Generated_Maps.png">
 </p>
 
-Unfortunately, the training error for U-Net with LSTM resched a plateau early in the training process and ramined almost constant throughout.
+Unfortunately, the training error for U-Net with LSTM reached a plateau early in the training process and ramined almost constant throughout.
 
 
 
