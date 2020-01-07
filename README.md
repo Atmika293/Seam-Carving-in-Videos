@@ -16,6 +16,12 @@ In order to train  network to generate saliency maps that incorporate temporal i
 - Energy and segmentation of all frames after the current frame
 
 For the segmentation of foreground objects, [DAVIS 2017 Video Segmentation Dataset](https://davischallenge.org/davis2017/code.html#unsupervised) was used, which consists of 90 RGB videos, each frame with a corresponding segmentation mask annotating the subject of the video. Specifically, the 480p version was used for target generation.
+<p align="center">
+    <img src="./images/DAVIS.png">
+</p>
+<p align="center">
+    <em>Video frames and their corresponding segmentation masks sampled from videos (i)’tractor-sand’, (ii)’breakdance’ and (iii)’bmx-bumps’ in the DAVIS dataset.</em>
+</p>
 
 For each video, the energy E<sub>i</sub> of the i<sup>th</sup> frame F<sub>i</sub> is calculated by:
 <p align="center">E<sub>i</sub>=∇σ(F<sub>i</sub>)</p>
@@ -29,10 +35,39 @@ The segmentation S'<sub>i</sub> is calculated from annotation S<sub>i</sub> of t
 The saliency map M<sub>i</sub> is then calculated by
 <p align="center">M<sub>i</sub>(x,y)=max⁡(E<sub>i</sub>(x,y), S'<sub>i</sub>(x,y))</p>
 
-In order to incorporate temporal information into the target, the dense optical flow from M<sub>i</sub> to M<sub>i+1</sub> is calculated, which gives us (dx/dt,dy/dt) for each pixel in the i<sup>t</sup> frame. Starting from the last frame and propagating to the first frame, each target saliency map T<sub>i</sub> are calculated by
+In order to incorporate temporal information into the target, the dense optical flow from M<sub>i</sub> to M<sub>i+1</sub> is calculated, which gives us (dx/dt,dy/dt) for each pixel in the i<sup>th</sup> frame. Starting from the last frame and propagating to the first frame, each target saliency map T<sub>i</sub> are calculated by
 <p align="center">T<sub>i</sub>(x,y)=max⁡(M<sub>i+1</sub>(x+dx,y+dy),M<sub>i</sub>(x,y))</p>
+
+<p align="center">
+    <img src="./images/Seam-Carving.jpg">
+</p>
+<p align="center">
+    <em>Video frames and their corresponding target saliency maps sampled from videos (i)’tractor-sand’, (ii)’breakdance’ and (iii)’bmx-bumps’ in the DAVIS dataset. Dynamic programming was used to determine 50 seams with the lowest cumulative energy (marked in red).</em>
+</p>
 
 ### Neural Networks ###
 The network architectures experimented with were inspired from Residual U-Net described in [Road Extraction by Deep Residual U-Net](https://arxiv.org/abs/1711.10684). The implementation for Residual U-Net (without LSTM) was adapted from [this repository](https://github.com/DuFanXin/deep_residual_unet).
+
+<p align="center">
+    <img src="./images/Network1.png">
+</p>
+<p align="center">
+    <em>Residual U-Net</em>
+</p>
+
+<p align="center">
+    <img src="./images/Network2.png">
+</p>
+<p align="center">
+    <em>Residual U-Net with LSTM</em>
+</p>
+
+### Results ###
+Due to hardware limitations, the video frames had to be resized to 56x32 and sliced into segments of 10 frames each. The netork has been trained on such segments. The results for a randomly sampled sequence of 10 frames from (i)'tractor-sand', used for training, and (ii)'breakdance' and (iii)'bmx-bumps', used only for validation is shown below.
+<p align="center">
+    <img src="./images/Generated_Maps.png">
+</p>
+
+
 
 
